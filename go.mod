@@ -1,3 +1,3 @@
-module Users/Desktop/NeoToolsBackend
+module Users/Desktop/NeoToolsBackend/protos
 
 go 1.23.1
