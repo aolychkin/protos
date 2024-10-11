@@ -3,9 +3,16 @@
 version: "3"
 
 tasks:
-  generate:
+  generate_sso:
     aliases:
-      - gen
+      - gen_sso
     desc: "Generate code from proto files"
     cmds:
       - protoc -I proto proto/sso/*.proto --go_out=./gen/go/ --go_opt=paths=source_relative --go-grpc_out=./gen/go/ --go-grpc_opt=paths=source_relative
+
+  generate_finance:
+    aliases:
+      - gen_fin
+    desc: "Generate code from proto files"
+    cmds:
+      - protoc -I proto proto/finance/*.proto --go_out=./gen/go/ --go_opt=paths=source_relative --go-grpc_out=./gen/go/ --go-grpc_opt=paths=source_relative
