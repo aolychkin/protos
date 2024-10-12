@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FundConfig_CreateFund_FullMethodName = "/finance.FundConfig/CreateFund"
-	FundConfig_AddChild_FullMethodName   = "/finance.FundConfig/AddChild"
-	FundConfig_AddGoal_FullMethodName    = "/finance.FundConfig/AddGoal"
-	FundConfig_GetFund_FullMethodName    = "/finance.FundConfig/GetFund"
+	FundConfig_CreateFund_FullMethodName  = "/finance.FundConfig/CreateFund"
+	FundConfig_AddChild_FullMethodName    = "/finance.FundConfig/AddChild"
+	FundConfig_AddGoal_FullMethodName     = "/finance.FundConfig/AddGoal"
+	FundConfig_GetFund_FullMethodName     = "/finance.FundConfig/GetFund"
+	FundConfig_GetFundTree_FullMethodName = "/finance.FundConfig/GetFundTree"
 )
 
 // FundConfigClient is the client API for FundConfig service.
@@ -33,6 +34,7 @@ type FundConfigClient interface {
 	AddChild(ctx context.Context, in *AddChildRequest, opts ...grpc.CallOption) (*AddChildResponse, error)
 	AddGoal(ctx context.Context, in *AddGoalRequest, opts ...grpc.CallOption) (*AddGoalResponse, error)
 	GetFund(ctx context.Context, in *GetFundRequest, opts ...grpc.CallOption) (*GetFundResponse, error)
+	GetFundTree(ctx context.Context, in *GetFundTreeRequest, opts ...grpc.CallOption) (*GetFundTreeResponse, error)
 }
 
 type fundConfigClient struct {
@@ -83,6 +85,16 @@ func (c *fundConfigClient) GetFund(ctx context.Context, in *GetFundRequest, opts
 	return out, nil
 }
 
+func (c *fundConfigClient) GetFundTree(ctx context.Context, in *GetFundTreeRequest, opts ...grpc.CallOption) (*GetFundTreeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFundTreeResponse)
+	err := c.cc.Invoke(ctx, FundConfig_GetFundTree_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FundConfigServer is the server API for FundConfig service.
 // All implementations must embed UnimplementedFundConfigServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type FundConfigServer interface {
 	AddChild(context.Context, *AddChildRequest) (*AddChildResponse, error)
 	AddGoal(context.Context, *AddGoalRequest) (*AddGoalResponse, error)
 	GetFund(context.Context, *GetFundRequest) (*GetFundResponse, error)
+	GetFundTree(context.Context, *GetFundTreeRequest) (*GetFundTreeResponse, error)
 	mustEmbedUnimplementedFundConfigServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedFundConfigServer) AddGoal(context.Context, *AddGoalRequest) (
 }
 func (UnimplementedFundConfigServer) GetFund(context.Context, *GetFundRequest) (*GetFundResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFund not implemented")
+}
+func (UnimplementedFundConfigServer) GetFundTree(context.Context, *GetFundTreeRequest) (*GetFundTreeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFundTree not implemented")
 }
 func (UnimplementedFundConfigServer) mustEmbedUnimplementedFundConfigServer() {}
 func (UnimplementedFundConfigServer) testEmbeddedByValue()                    {}
@@ -206,6 +222,24 @@ func _FundConfig_GetFund_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FundConfig_GetFundTree_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFundTreeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FundConfigServer).GetFundTree(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FundConfig_GetFundTree_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FundConfigServer).GetFundTree(ctx, req.(*GetFundTreeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FundConfig_ServiceDesc is the grpc.ServiceDesc for FundConfig service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var FundConfig_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetFund",
 			Handler:    _FundConfig_GetFund_Handler,
+		},
+		{
+			MethodName: "GetFundTree",
+			Handler:    _FundConfig_GetFundTree_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

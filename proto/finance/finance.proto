@@ -11,6 +11,7 @@ service FundConfig {
   rpc AddChild (AddChildRequest) returns (AddChildResponse);
   rpc AddGoal (AddGoalRequest) returns (AddGoalResponse);
   rpc GetFund (GetFundRequest) returns (GetFundResponse);
+  rpc GetFundTree (GetFundTreeRequest) returns (GetFundTreeResponse);
 }
 
 message CreateFundRequest {
@@ -60,3 +61,34 @@ message GetFundResponse {
   repeated int64 child_id = 3 [packed=true];
   repeated int64 goal_id = 4 [packed=true];
 }
+
+message GetFundTreeRequest {
+  int64 fund_id = 1;
+}
+
+//TODO: определить в зависимости от его использования
+message GetFundTreeResponse {
+  FundTree fund_tree = 1;
+}
+
+// ================================= //
+// Вспомогательные структуры данных //
+// =============================== //
+message FundTree{
+    uint64 FundID = 1;
+    string FundLabe = 2;
+    float Value = 3;
+    repeated GoalTree Goals = 4;
+    repeated FundTree Child = 5;
+};
+
+message GoalTree{
+    uint64 GoalId = 1;
+    string GoalLabel = 2;
+    google.protobuf.Timestamp ExpireDate = 3;
+    float GoalTotal = 4;
+    float CurrentValue = 5;
+    float SprintTotal = 6;
+    float SprintIncome = 7;
+};
+
