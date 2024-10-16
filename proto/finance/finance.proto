@@ -75,20 +75,25 @@ message GetFundTreeResponse {
 // Вспомогательные структуры данных //
 // =============================== //
 message FundTree{
-    uint64 FundID = 1;
-    string FundLabe = 2;
-    float Value = 3;
-    repeated GoalTree Goals = 4;
-    repeated FundTree Child = 5;
+    uint64 fund_id = 1;
+    string fund_label = 2;
+    int64 union_id = 3;
+    uint64 priority = 4;
+    bool check_child = 5;
+    int64 rule_value = 6;    
+    float fund_value = 7;
+    repeated GoalTree goals = 8;
+    repeated FundTree childs = 9;
+    bool is_tmp = 10;
 };
 
 message GoalTree{
-    uint64 GoalId = 1;
-    string GoalLabel = 2;
-    google.protobuf.Timestamp ExpireDate = 3;
-    float GoalTotal = 4;
-    float CurrentValue = 5;
-    float SprintTotal = 6;
-    float SprintIncome = 7;
+    uint64 goal_id = 1;
+    string goal_label = 2;
+    google.protobuf.Timestamp expire_date = 3;
+    float goal_total = 4;
+    float current_value = 5;
+    float sprint_total = 6;
+    float sprint_income = 7;
 };
 
